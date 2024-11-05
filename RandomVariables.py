@@ -4,6 +4,14 @@
 def num_heads(event):
     return event.count(True)
 
+# L12-8
+def num_heads_equals(num, sample_space):
+    event = []
+    for i in sample_space:
+        if num == num_heads(i):
+            event.insert(i)
+    return event
+
 # L12-6
 # Indicator r.v.
 def both_prime(event):
@@ -18,11 +26,10 @@ def is_prime(num):
             return False
     return True
 
- # L12-8
- 
- 
+  
 if __name__ == "__main__":
-    event = [True, False, True, False, True]  # Example event
+    event = [True, False, True, False, True]
     print(f"Number of heads: {num_heads(event)}")
+    print(f"num_heads = 3: {num_heads_equals(3, event)}")
     event = [3, 5]
     print(f"Both prime: {both_prime(event)}")
