@@ -52,7 +52,7 @@ def is_prime(num):
 def PDF(x, random_variable, sample_space):
     RV_range = range_of_random_variable(random_variable, sample_space)
     if(RV_range.__contains__(x)):
-        return uniform_probability_of(x, sample_space)
+        return uniform_probability_of(num_heads_equals(x, sample_space), sample_space)
     else:
         return 0
     
@@ -61,7 +61,8 @@ def CDF(x, random_variable, sample_space):
     RV_range = range_of_random_variable(random_variable, sample_space)
     for i in RV_range:
         if i < x:
-            sum += uniform_probability_of(i, sample_space)
+            sum += uniform_probability_of(num_heads_equals(i, sample_space), sample_space)
+    return sum
     
 def range_of_random_variable(random_variable, sample_space):
     RV_range = []
@@ -83,5 +84,9 @@ if __name__ == "__main__":
           sample_space)}")
     #event = [3, 5]
     #print(f"Both prime: {both_prime(event)}")
-    random_variable = RandomVariable(num_heads, sample_space)
-    print(f"sample space of rv: {sample_space}")
+    
+    #random_variable = RandomVariable(num_heads, sample_space)
+    #print(f"sample space of rv: {random_variable.sample_space}")
+    
+    print(f"PDF(2) = {PDF(2, num_heads, sample_space)}")
+    print(f"CDF(2.3) = {CDF(2.3, num_heads, sample_space)}")
