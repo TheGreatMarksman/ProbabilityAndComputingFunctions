@@ -1,7 +1,33 @@
-class RandomVariable:
-    def RandomVariable(self, function, sample_space):
+class ThreeCoinTossRandomVariable:
+    def __init__(self, function):
         self.function = function
-        self.sample_space = sample_space
+        self.sample_space = self.make_sample_space()
+        
+    def make_sample_space(self):
+        sample_space = [[False, False, False], [True, False, False], [True, True, False],
+                    [True, True, True], [True, False, True], [False, True, False],
+                    [False, True, True], [False, False, True]]
+        return sample_space
+    
+    def evaluate_at(self, event):
+        return self.function(event)
+    
+    # L12-8
+    def equals(self, num):
+        event = []
+        for i in self.sample_space:
+            if num == self.evaluate_at(i):
+                event.append(i)
+        return event
+    def probability_of(self, event):
+        return event.__len__() / self.sample_space.__len__()
+    def range(self):
+        RV_range = []
+        for i in self.sample_space:
+            result = self.evaluate_at(i)
+            if not RV_range.__contains__(result):
+                RV_range.append(result)
+        return RV_range
 
 # L12-5
 # Heads are 0, tails are 1
@@ -21,16 +47,7 @@ def make_sample_space(num_coins):
     
     return sample_space
 
-# L12-8
-def num_heads_equals(num, sample_space):
-    event = []
-    for i in sample_space:
-        if num == num_heads(i):
-            event.append(i)
-    return event
 
-def uniform_probability_of(event, sample_space):
-    return event.__len__() / sample_space.__len__()
 
 
 
@@ -49,44 +66,26 @@ def is_prime(num):
     return True
 
 # L12-7
-def PDF(x, random_variable, sample_space):
-    RV_range = range_of_random_variable(random_variable, sample_space)
+def PDF(x, random_variable):
+    RV_range = random_variable.range()
     if(RV_range.__contains__(x)):
-        return uniform_probability_of(num_heads_equals(x, sample_space), sample_space)
+        return random_variable.probability_of(random_variable.equals(x))
     else:
         return 0
     
-def CDF(x, random_variable, sample_space):
+def CDF(x, random_variable):
     sum = 0
-    RV_range = range_of_random_variable(random_variable, sample_space)
+    RV_range = random_variable.range()
     for i in RV_range:
         if i < x:
-            sum += uniform_probability_of(num_heads_equals(i, sample_space), sample_space)
+            sum += random_variable.probability_of(random_variable.equals(i))
     return sum
-    
-def range_of_random_variable(random_variable, sample_space):
-    RV_range = []
-    for i in sample_space:
-        result = random_variable(i)
-        if not RV_range.__contains__(result):
-            RV_range.append(result)
-    return RV_range
   
 if __name__ == "__main__":
-    #sample_space = make_sample_space(3)
-    sample_space = [[False, False, False], [True, False, False], [True, True, False],
-                    [True, True, True], [True, False, True], [False, True, False],
-                    [False, True, True], [False, False, True]]
-    #event = [True, False, True]
-    #print(f"Number of heads: {num_heads(event)}")
-    print(f"num_heads = 2: {num_heads_equals(2, sample_space)}")
-    print(f"probability of num_heads = 2: {uniform_probability_of(num_heads_equals(2, sample_space),
-          sample_space)}")
-    #event = [3, 5]
-    #print(f"Both prime: {both_prime(event)}")
+    RV = ThreeCoinTossRandomVariable(num_heads)
+    print(f"Let A = the number of heads that show up when 3 coins are tossed")
+    print(f"A([True, True, False]): {RV.evaluate_at([True, True, False])}")
+    print(f"A = 2: {RV.equals(2)}")
     
-    #random_variable = RandomVariable(num_heads, sample_space)
-    #print(f"sample space of rv: {random_variable.sample_space}")
-    
-    print(f"PDF(2) = {PDF(2, num_heads, sample_space)}")
-    print(f"CDF(2.3) = {CDF(2.3, num_heads, sample_space)}")
+    print(f"PDF(2) = {PDF(2, RV)}")
+    print(f"CDF(2.3) = {CDF(2.3, RV)}")
