@@ -1,6 +1,6 @@
-class ThreeCoinTossRandomVariable:
-    def __init__(self, function):
-        self.function = function
+# Counts the number of heads of three coins tossed
+class NumHeads:
+    def __init__(self):
         self.sample_space = self.make_sample_space()
         
     def make_sample_space(self):
@@ -9,9 +9,11 @@ class ThreeCoinTossRandomVariable:
                     [False, True, True], [False, False, True]]
         return sample_space
     
+    # L12-5
+    # Heads are 0, tails are 1
+    # Bernoulli and indicator r.v.
     def evaluate_at(self, event):
-        return self.function(event)
-    
+        return event.count(True)
     # L12-8
     def equals(self, num):
         event = []
@@ -29,11 +31,38 @@ class ThreeCoinTossRandomVariable:
                 RV_range.append(result)
         return RV_range
 
-# L12-5
-# Heads are 0, tails are 1
-# Bernoulli and indicator r.v.
-def num_heads(event):
-    return event.count(True)
+# L14-4
+# Returns if a biased coin comes up heads
+class IsHeads:
+    def __init__(self, probability):
+        self.sample_space = self.make_sample_space()
+        self.probability = probability
+    def make_sample_space(self):
+        sample_space = [0, 1]
+        return sample_space
+    def evaluate_at(self, event):
+        return event
+    def equals(self, num):
+        event = []
+        for i in self.sample_space:
+            if num == self.evaluate_at(i):
+                event.append(i)
+        return event
+    def probability_of(self, event):
+        if event == 1:
+            return self.probability
+        elif event == 0:
+            return 1 - self.probability
+        else:
+            return 10
+    def range(self):
+        RV_range = []
+        for i in self.sample_space:
+            result = self.evaluate_at(i)
+            if not RV_range.__contains__(result):
+                RV_range.append(result)
+        return RV_range
+
 
 # Incomplete
 def make_sample_space(num_coins):
@@ -82,7 +111,7 @@ def CDF(x, random_variable):
     return sum
   
 if __name__ == "__main__":
-    RV = ThreeCoinTossRandomVariable(num_heads)
+    RV = NumHeads()
     print(f"Let A = the number of heads that show up when 3 coins are tossed")
     print(f"A([True, True, False]): {RV.evaluate_at([True, True, False])}")
     print(f"A = 2: {RV.equals(2)}")
