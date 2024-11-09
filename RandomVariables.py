@@ -149,6 +149,15 @@ def is_prime(num):
             return False
     return True
 
+def combination(n, r):
+    return factorial(n) / (factorial(r) * factorial(n-r))
+
+def factorial(num):
+    result = 1
+    for i in range(1, num):
+        result *= i
+    return result
+
 # L12-7
 def PDF(x, random_variable):
     RV_range = random_variable.range()
