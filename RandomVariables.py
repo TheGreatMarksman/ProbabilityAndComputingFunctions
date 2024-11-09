@@ -63,6 +63,61 @@ class IsHeads:
                 RV_range.append(result)
         return RV_range
 
+# L14-5
+# Returns number on die rolled
+class NumberRolled:
+    def __init__(self):
+        self.sample_space = self.make_sample_space()
+    def make_sample_space(self):
+        sample_space = []
+        for i in range(1, 6):
+            sample_space.append(i)
+        return sample_space
+    def evaluate_at(self, event):
+        return event
+    def equals(self, num):
+        if num > 0 and num < 7:
+            return [num]
+        return [ 10 ]
+    def probability_of(self, event):
+        if event[0] > 0 and event[0] < 7:
+            return 1/6
+        return 0
+
+    def range(self):
+        RV_range = []
+        for i in range(1, 6):
+            RV_range.append(i)
+        return RV_range
+
+# L14-6
+# Counts the number of heads in the 3 coin tosses each with probability p
+class NumBiasedHeads:
+    def __init__(self, p):
+        self.sample_space = self.make_sample_space()
+        self.p = p
+    def make_sample_space(self):
+        sample_space = [[0, 0, 0], [0, 0, 1], [0, 1, 1], [0, 1, 0], [1, 1, 0], [1, 0, 0],
+                        [1, 0, 1], [1, 1, 1]]
+        return sample_space
+    def evaluate_at(self, n):
+        # finish later
+        return n
+    def equals(self, num):
+        if num > 0 and num < 7:
+            return [num]
+        return [ 10 ]
+    def probability_of(self, event):
+        if event[0] > 0 and event[0] < 7:
+            return 1/6
+        return 0
+
+    def range(self):
+        RV_range = []
+        for i in range(1, 6):
+            RV_range.append(i)
+        return RV_range
+
 
 # Incomplete
 def make_sample_space(num_coins):
