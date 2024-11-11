@@ -84,31 +84,42 @@ class IsHeads:
         print(f"CDF(0.5) = {CDF(0.5, RV)}")
 
 # L14-5
-# Returns number on die rolled
+# Returns number on die rolled with sides n = 6
 class NumberRolled:
     def __init__(self):
+        self.n = 6
         self.sample_space = self.make_sample_space()
     def make_sample_space(self):
         sample_space = []
-        for i in range(1, 6):
-            sample_space.append(i)
+        for i in range(1, self.n):
+            event = [i]
+            sample_space.append(event)
         return sample_space
     def evaluate_at(self, event):
-        return event
+        return event[0]
     def equals(self, num):
         if num > 0 and num < 7:
             return [num]
         return [ 10 ]
     def probability_of(self, event):
         if event[0] > 0 and event[0] < 7:
-            return 1/6
+            return 1 / self.n
         return 0
 
     def get_range(self):
         RV_range = []
-        for i in range(1, 6):
+        for i in range(1, self.n):
             RV_range.append(i)
         return RV_range
+    @staticmethod
+    def test():
+        RV = NumberRolled()
+        print(f"Let A = number rolled on a dice")
+        print(f"A([3]): {RV.evaluate_at([3])}")
+        print(f"A = 6: {RV.equals(6)}")
+    
+        print(f"PDF(4) = {PDF(4, RV)}")
+        print(f"CDF(4) = {CDF(4, RV)}")
 
 # L14-6
 # Counts the number of heads in the n = 3 coin tosses each with probability p
@@ -131,7 +142,7 @@ class NumBiasedHeads:
         return event
     def probability_of(self, event):
         num = self.evaluate_at(event)
-        return combination(self.n, num) * pow(p, num) * pow(1 - p, self.n - num)
+        return combination(self.n, num) * pow(self.p, num) * pow(1 - self.p, self.n - num)
 
     def get_range(self):
         RV_range = []
@@ -140,6 +151,18 @@ class NumBiasedHeads:
             if not RV_range.__contains__(result):
                 RV_range.append(result)
         return RV_range
+    @staticmethod
+    def test(p):
+        RV = NumBiasedHeads(p)
+        print(f"Let A = the number of heads in 3 coin tosses each with probability {p} to get heads")
+        print(f"A([1, 0, 1]): {RV.evaluate_at([1, 0, 1])}")
+        print(f"A = 2: {RV.equals(2)}")
+
+        print(f"PDF(1) = {PDF(1, RV)}")
+        print(f"PDF(2) = {PDF(2, RV)}")
+        print(f"PDF(3) = {PDF(3, RV)}")
+
+        print(f"CDF(2) = {CDF(2, RV)}")
 
 # L14-8
 # Counts the number of tosses needed to get the first heads
@@ -210,14 +233,16 @@ def PDF(x, random_variable):
         return random_variable.probability_of(random_variable.equals(x))
     else:
         return 0
-    
+
+# Error because of i <= x, i < x issue
 def CDF(x, random_variable):
     sum = 0
     RV_range = random_variable.get_range()
     for i in RV_range:
-        if i < x:
+        if i <= x:
             sum += random_variable.probability_of(random_variable.equals(i))
     return sum
 
 if __name__ == "__main__":
-    IsHeads.test(0.7)
+    # doesn't quite work
+    NumBiasedHeads.test(0.5)
