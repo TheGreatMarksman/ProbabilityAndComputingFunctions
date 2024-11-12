@@ -133,11 +133,14 @@ class NumBiasedHeads:
                         [1, 0, 1], [1, 1, 1]]
         return sample_space
     def evaluate_at(self, event):
-        return event.count(1)
+        sum = 0
+        for i in event:
+            sum += i.count(1)
+        return sum
     def equals(self, num):
         event = []
         for i in self.sample_space:
-            if num == self.evaluate_at(i):
+            if num == self.evaluate_at([i]):
                 event.append(i)
         return event
     def probability_of(self, event):
@@ -147,22 +150,35 @@ class NumBiasedHeads:
     def get_range(self):
         RV_range = []
         for i in self.sample_space:
-            result = self.evaluate_at(i)
+            result = self.evaluate_at([i])
             if not RV_range.__contains__(result):
                 RV_range.append(result)
         return RV_range
     @staticmethod
     def test(p):
         RV = NumBiasedHeads(p)
+        print(f"A([1, 0, 1], [1, 0, 0]): {RV.evaluate_at([[1, 0, 1], [1, 0, 0]])}")
+        print(f"Pr(A = 1) = {RV.probability_of(RV.equals(1))}")
+        print(f"Pr(A = 2) = {RV.probability_of(RV.equals(2))}")
+        print(f"Pr(A = 3) = {RV.probability_of(RV.equals(3))}")
+        """
         print(f"Let A = the number of heads in 3 coin tosses each with probability {p} to get heads")
-        print(f"A([1, 0, 1]): {RV.evaluate_at([1, 0, 1])}")
+        print(f"A([1, 0, 1]): {RV.evaluate_at([[1, 0, 1]])}")
         print(f"A = 2: {RV.equals(2)}")
+        
+        print(f"Pr(A = 1) = {RV.probability_of(RV.equals(1))}")
+        print(f"Pr(A = 2) = {RV.probability_of(RV.equals(2))}")
+        print(f"Pr(A = 3) = {RV.probability_of(RV.equals(3))}")
+        
+        print(f"Pr([[0, 1, 1], [1, 1, 0], [1, 0, 1]]) = {RV.evaluate_at([[0, 1, 1], [1, 1, 0], [1, 0, 1]])}")
+
 
         print(f"PDF(1) = {PDF(1, RV)}")
         print(f"PDF(2) = {PDF(2, RV)}")
         print(f"PDF(3) = {PDF(3, RV)}")
 
         print(f"CDF(2) = {CDF(2, RV)}")
+        """
 
 # L14-8
 # Counts the number of tosses needed to get the first heads
